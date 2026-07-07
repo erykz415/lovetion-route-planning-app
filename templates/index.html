@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lo&lt;etion</title>
+
+    <!---Leaflet CSS--->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+    <!---Leaflet Routing Machine CSS--->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css"/>
+
+    <link rel="stylesheet" href="/static/style.css"/>
+</head>
+
+<body>
+<div id="sidebar">
+    <!---Header--->
+    <div id="logo">Lo<span>&lt;</span>etion</div>
+
+    <!---Dark mode toggle--->
+    <button id="theme-toggle" onclick="toggleTheme()">
+        🌙 Night mode
+    </button>
+
+    <!---Jump to place--->
+    <div class="search-box">
+        <label>🔍 Go to place</label>
+        <input
+                type="text"
+                id="search-jump"
+                placeholder="Search any place..."
+                oninput="searchJump(this.value)"
+                autocomplete="off"
+        />
+        <div id="suggestions-jump" class="suggestions"></div>
+    </div>
+
+    <!---Start point search--->
+    <div class="search-box">
+        <label>🔵 Start point</label>
+        <input
+                type="text"
+                id="search-start"
+                placeholder="Enter start address..."
+                oninput="searchAddress(this.value, 'start')"
+                autocomplete="off"
+        />
+        <div id="suggestions-start" class="suggestions"></div>
+    </div>
+
+    <!---End point search--->
+    <div class="search-box">
+        <label>🔴 End point</label>
+        <input
+                type="text"
+                id="search-end"
+                placeholder="Enter end address..."
+                oninput="searchAddress(this.value, 'end')"
+                autocomplete="off"
+        />
+        <div id="suggestions-end" class="suggestions"></div>
+    </div>
+
+    <!---Points list--->
+    <div id="points-section">
+        <h3>📍 Points on route</h3>
+        <ul id="points-list"></ul>
+    </div>
+
+    <!---Route stats--->
+    <div id="stats">
+        <h3>📊 Route stats</h3>
+        <div class="stat-row">
+            <span>📏 Distance</span>
+            <strong id="stat-distance">-</strong>
+        </div>
+        <div class="stat-row">
+            <span>🚶 Walking:</span>
+            <strong id="stat-walk">-</strong>
+        </div>
+        <div class="stat-row">
+            <span>🚴 Cycling:</span>
+            <strong id="stat-bike">-</strong>
+        </div>
+    </div>
+
+    <!---Custom speed--->
+    <div id="custom-speed">
+        <h3>⚙️ Choose speed</h3>
+
+        <div class="speed-toggle">
+            <button
+                    id="btn-speed-off"
+                    class="speed-btn active"
+                    onclick="setSpeedMode(false)"
+            >
+                Default
+            </button>
+
+            <button
+                    id="btn-speed-on"
+                    class="speed-btn"
+                    onclick="setSpeedMode(true)"
+            >
+                Custom
+            </button>
+        </div>
+
+        <!-- Default -> hidden -->
+        <div id="speed-controls" class="hidden">
+            <div class="speed-row">
+                <label>🚶 Walking</label>
+
+                <div class="slider-group">
+                    <input
+                            type="range"
+                            id="speed-walk"
+                            min="1"
+                            max="15"
+                            value="5"
+                            step="0.5"
+                            oninput="onSpeedChange()"
+                    />
+
+                    <span id="speed-walk-val">5 km/h</span>
+                </div>
+            </div>
+
+            <div class="speed-row">
+                <label>🚴 Cycling</label>
+
+                <div class="slider-group">
+                    <input
+                            type="range"
+                            id="speed-bike"
+                            min="5"
+                            max="50"
+                            value="18"
+                            step="1"
+                            oninput="onSpeedChange()"
+                    />
+
+                    <span id="speed-bike-val">18 km/h</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!---Action buttons--->
+    <div id="actions">
+        <button class="btn-action" onclick="clearRoute()">
+            🗑️ Clear route
+        </button>
+        <button class="btn-action" onclick="useMyLocation()">
+            📍 My location
+        </button>
+    </div>
+</div>
+
+
+<!---Map--->
+<div id="map"></div>
+
+<!---Leaflet JS--->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!---Leaflet Routing Machine JS--->
+<script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
