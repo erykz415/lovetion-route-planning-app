@@ -1,1 +1,0 @@
-# lovetion-route-planning-app
